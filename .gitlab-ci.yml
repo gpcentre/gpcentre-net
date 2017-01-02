@@ -1,3 +1,4 @@
+image: alpine
 stages:
   - deploy
 
@@ -14,6 +15,8 @@ deploy:www:
   stage: deploy
   # variables:
   #   CI_DEBUG_TRACE: "true"
+  tags:
+    - shell
   script:
     - rm -rf "$WWW_PATH"
     - cp -R src/ "$WWW_PATH"
