@@ -18,10 +18,10 @@ deploy:www:
     - rm -rf "$WWW_PATH"
     - cp -R src/ "$WWW_PATH"
 
-deploy:docker:
+deploy:container:
   stage: deploy
-  variables:
-    CI_DEBUG_TRACE: "true"
+  # variables:
+  #   CI_DEBUG_TRACE: "true"
   script:
     - rm -rf "$DEPLOY_PATH"
     - cp -R "$CI_PROJECT_DIR" "$DEPLOY_PATH"
