@@ -10,7 +10,6 @@ services:
       - /var/run/docker.sock:/tmp/docker.sock:ro 
       - "$VAR_ROOT/www/gpcentre-net:/var/www/gpcentre-net"
       - "$VAR_ROOT/lib/php-fpm:/var/lib/php-fpm"
-    replicas: 3
 networks:
   default:
     external:
