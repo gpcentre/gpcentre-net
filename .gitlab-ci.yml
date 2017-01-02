@@ -1,21 +1,29 @@
 stages:
-    - deploy
+  - deploy
 
-deploy_prod:
+variables:
+  DEPLOY_PATH: /var/docker/gpcentre-net
+  WWW_PATH: /var/www/gpcentre-net
+
+before_script:
+  - echo "ENV=production" >> .env
+  - echo "VAR_ROOT=/var" >> .env
+  - echo "COMPOSE_PROJECT_NAME=gpcentre-net" >> .env
+
+deploy:www:
   stage: deploy
+  # variables:
+  #   CI_DEBUG_TRACE: "true"
   script:
-    - rm -rf /var/docker/gpcentre-net
-    - cp -R $CI_PROJECT_DIR /var/docker/gpcentre-net
-    - cd /var/docker/gpcentre-net
-    - rm -rf .git*
-    - echo "ENV=production" >> .env
-    - echo "VAR_ROOT=/var" >> .env
-    - docker-compose down
-    - rm -rf /var/www/gpcentre-net
-    - mv src/ /var/www/gpcentre-net
+    - rm -rf "$WWW_PATH"
+    - cp -R src/ "$WWW_PATH"
+
+deploy:docker:
+  stage: deploy
+  variables:
+    CI_DEBUG_TRACE: "true"
+  script:
+    - rm -rf "$DEPLOY_PATH"
+    - cp -R "$CI_PROJECT_DIR" "$DEPLOY_PATH"
+    - cd "$DEPLOY_PATH"
     - docker-compose up -d
-  environment:
-    name: production
-    url: https://www.gpcentre.net/
-  only:
-  - master
