@@ -27,3 +27,7 @@ deploy:docker:
     - cp -R "$CI_PROJECT_DIR" "$DEPLOY_PATH"
     - cd "$DEPLOY_PATH"
     - docker-compose up -d
+
+after_script:
+  - cd "$DEPLOY_PATH"
+  - rm -rf .git*

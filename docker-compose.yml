@@ -5,7 +5,7 @@ services:
     container_name: gpcentre-net
     environment:
       WORKDIR: /etc/nginx
-      VIRTUAL_HOST: localhost,*.gpcentre.net
+      VIRTUAL_HOST: localhost,*.gpcentre.net,138.68.11.157
     ports:
       - "1080:80"
       - "1443:443"
