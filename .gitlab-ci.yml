@@ -1,0 +1,21 @@
+stages:
+    - deploy
+
+deploy_prod:
+  stage: deploy
+  script:
+    - rm -rf /var/docker/gpcentre-net
+    - cp -R $CI_PROJECT_DIR /var/docker/gpcentre-net
+    - cd /var/docker/gpcentre-net
+    - rm -rf .git*
+    - echo "ENV=production" >> .env
+    - echo "VAR_ROOT=/var" >> .env
+    - docker-compose down
+    - rm -rf /var/www/gpcentre-net
+    - mv src/ /var/www/gpcentre-net
+    - docker-compose up -d
+  environment:
+    name: production
+    url: https://www.gpcentre.net/
+  only:
+  - master

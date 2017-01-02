@@ -1,0 +1,22 @@
+version: '2'
+services:
+   gpcentre-net:
+    image: nginx:latest
+    container_name: gpcentre-net
+    environment:
+      WORKDIR: /etc/nginx
+      VIRTUAL_HOST: localhost,*.gpcentre.net
+    ports:
+      - "1080:80"
+      - "1443:443"
+    # external_links:
+    #    - php71:phpfcgi
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - /var/run/docker.sock:/tmp/docker.sock:ro 
+      - $VAR_ROOT/www/gpcentre-net:/var/www/gpcentre-net
+      - $VAR_ROOT/lib/php-fpm:/var/lib/php-fpm
+networks:
+  default:
+    external:
+      name: gpcentre_default
