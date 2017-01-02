@@ -1,6 +1,7 @@
 image: alpine
 stages:
-  - deploy
+  - deploy-www
+  - deploy-container
 
 variables:
   DEPLOY_PATH: /var/docker/gpcentre-net
@@ -12,19 +13,21 @@ before_script:
   - echo "COMPOSE_PROJECT_NAME=gpcentre-net" >> .env
 
 deploy:www:
-  stage: deploy
+  stage: deploy-www
   # variables:
   #   CI_DEBUG_TRACE: "true"
   tags:
-    - shell
+    - sfo2
   script:
     - rm -rf "$WWW_PATH"
     - cp -R src/ "$WWW_PATH"
 
 deploy:container:
-  stage: deploy
+  stage: deploy-container
   # variables:
   #   CI_DEBUG_TRACE: "true"
+  tags:
+    - sfo2
   script:
     - rm -rf "$DEPLOY_PATH"
     - cp -R "$CI_PROJECT_DIR" "$DEPLOY_PATH"
