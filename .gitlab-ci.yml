@@ -20,7 +20,7 @@ deploy:www:
     - shell
     - sfo2
   script:
-    - rsync -av --delete public src/ "$WWW_PATH"
+    - rsync -av --delete src/ "$WWW_PATH"
 
 deploy:container:
   stage: deploy-container
