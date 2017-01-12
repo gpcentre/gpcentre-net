@@ -1,26 +1,18 @@
 version: '2'
 services:
-  gpcentre-net:
-    image: nginx:latest
+  gpc:
+    image: gpcentre/php71-fpm-nginx:latest
+    env_file: /etc/docker/envs/gpcentre-net.env
     environment:
-      WORKDIR: /etc/nginx
+      WEBROOT: /var/www/public
+      DOMAIN: www.gpcentre.net
+      GIT_EMAIL: gp@gpcentre.net
       VIRTUAL_HOST: localhost,*.gpcentre.net,138.68.11.157
-    links:
-      - php71-fpm:phpfcgi
-    volumes:
-      - ./etc/nginx/conf.d:/etc/nginx/conf.d
-      - /var/run/docker.sock:/tmp/docker.sock:ro 
-      - "$VAR_ROOT/www/gpcentre-net:/var/www/gpcentre-net"
-  php71-fpm:
-    image: gpcentre/php71-fpm 
     external_links:
       - mariadb-node1:mariadb
-    ports:
-      - "9000"
     volumes:
-      - ./etc/php-fpm/php-fpm.d/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf
-      - ./etc/php-fpm/conf.d/zz-docker.ini:/usr/local/etc/php/conf.d/zz-docker.ini
-      - "$VAR_ROOT/www:/var/www"
+      - /var/run/docker.sock:/tmp/docker.sock:ro 
+      - "$WWWW_ROOT:/var/www"
 networks:
   default:
     external:

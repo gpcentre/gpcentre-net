@@ -17,16 +17,17 @@ deploy:www:
   # variables:
   #   CI_DEBUG_TRACE: "true"
   tags:
+    - shell
     - sfo2
   script:
-    - rm -rf "$WWW_PATH"
-    - cp -R src/ "$WWW_PATH"
+    - rsync -av --delete public src/ "$WWW_PATH"
 
 deploy:container:
   stage: deploy-container
   # variables:
   #   CI_DEBUG_TRACE: "true"
   tags:
+    - shell
     - sfo2
   script:
     - rm -rf "$DEPLOY_PATH"
