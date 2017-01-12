@@ -25,6 +25,7 @@ deploy:container:
     - shell
     - sfo2
   script:
+    - docker-compose down --remove-orphans
     - rm -rf "$DEPLOY_PATH"
     - cp -R "$CI_PROJECT_DIR" "$DEPLOY_PATH"
     - cd "$DEPLOY_PATH"
