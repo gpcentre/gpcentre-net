@@ -12,7 +12,7 @@ services:
       - mariadb-node1:mariadb
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro 
-      - "$WWWW_ROOT:/var/www"
+      - "$WWW_ROOT:/var/www"
 networks:
   default:
     external:
