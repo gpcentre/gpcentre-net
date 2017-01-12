@@ -7,6 +7,11 @@ variables:
   DEPLOY_PATH: /var/docker/gpcentre-net
   WWW_PATH: /var/www/gpcentre-net
 
+before_script:
+  - echo "ENV=production" >> .env
+  - echo "WWW_ROOT=/var/www/gpcentre-net" >> .env
+  - echo "COMPOSE_PROJECT_NAME=gpcentre-net" >> .env
+
 deploy:www:
   stage: deploy-www
   # variables:
