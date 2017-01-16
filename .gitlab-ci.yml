@@ -23,8 +23,6 @@ build:
 
 review:
   stage: review
-  variables:
-    CI_DEBUG_TRACE: "true"
   script:
     - rm -f .env
     - echo COMPOSE_PROJECT_NAME=$CI_BUILD_REF_SLUG >> .env
@@ -39,9 +37,7 @@ review:
   except:
     - master
   tags:
-    - nginx
     - review-apps
-    - deploy
 
 stop_review:
   stage: review
@@ -57,9 +53,8 @@ stop_review:
     name: review/$CI_BUILD_REF_NAME
     action: stop
   tags:
-    - nginx
     - review-apps
-    - deploy
+    - shell
 
 
 production:
@@ -69,6 +64,9 @@ production:
   tags:
     - shell
     - sfo2
+  when: manual
+  only:
+    - master
   script:
     - echo COMPOSE_PROJECT_NAME=gpcentre-net >> .env
     - echo DOMAIN=www.gpcentre.net >> .env
