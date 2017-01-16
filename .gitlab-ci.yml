@@ -44,7 +44,7 @@ stop_review:
     - rm -f .env
     - echo COMPOSE_PROJECT_NAME=$CI_BUILD_REF_SLUG >> .env
     - echo VIRTUAL_HOST=$CI_BUILD_REF_SLUG.gpcentre.net >> .env
-    - docker-compose -p $CI_BUILD_REF_SLUG down --force-orphans
+    - docker-compose -p $CI_BUILD_REF_SLUG down --remove-orphans
   variables:
     GIT_STRATEGY: none
   when: manual
