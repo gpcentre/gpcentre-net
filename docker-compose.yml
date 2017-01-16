@@ -4,15 +4,16 @@ services:
     image: gpcentre/php71-fpm-nginx:latest
     env_file: /etc/docker/envs/gpcentre-net.env
     environment:
-      WEBROOT: /var/www/public
+      COMPOSE_PROJECT_NAME: gpcentre-net
       DOMAIN: www.gpcentre.net
       GIT_EMAIL: gp@gpcentre.net
       VIRTUAL_HOST: localhost,*.gpcentre.net,138.68.11.157
+      WEBROOT: /var/www/public
     external_links:
       - mariadb-node1:mariadb
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro 
-      - "$WWW_ROOT:/var/www"
+      - ./src:/var/www
 networks:
   default:
     external:

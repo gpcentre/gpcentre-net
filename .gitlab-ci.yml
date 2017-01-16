@@ -1,26 +1,26 @@
 image: alpine
 stages:
-  - deploy-www
+#  - deploy-www
   - deploy-container
 
 variables:
   DEPLOY_PATH: /var/docker/gpcentre-net
   WWW_PATH: /var/www/gpcentre-net
 
-before_script:
-  - echo "ENV=production" >> .env
-  - echo "WWW_ROOT=/var/www/gpcentre-net" >> .env
-  - echo "COMPOSE_PROJECT_NAME=gpcentre-net" >> .env
+#before_script:
+#  - echo "ENV=production" >> .env
+#  - echo "WWW_ROOT=/var/www/gpcentre-net" >> .env
+#  - echo "COMPOSE_PROJECT_NAME=gpcentre-net" >> .env
 
-deploy:www:
-  stage: deploy-www
-  # variables:
-  #   CI_DEBUG_TRACE: "true"
-  tags:
-    - shell
-    - sfo2
-  script:
-    - rsync -av --delete src/ "$WWW_PATH"
+#deploy:www:
+#  stage: deploy-www
+#  # variables:
+#  #   CI_DEBUG_TRACE: "true"
+#  tags:
+#    - shell
+#    - sfo2
+#  script:
+#    - rsync -av --delete src/ "$WWW_PATH"
 
 deploy:container:
   stage: deploy-container
@@ -31,8 +31,8 @@ deploy:container:
     - sfo2
   script:
     - docker-compose down --remove-orphans
-    - rm -rf "$DEPLOY_PATH"
-    - cp -R "$CI_PROJECT_DIR" "$DEPLOY_PATH"
-    - cd "$DEPLOY_PATH"
+#    - rm -rf "$DEPLOY_PATH"
+#    - cp -R "$CI_PROJECT_DIR" "$DEPLOY_PATH"
+#    - cd "$DEPLOY_PATH"
     - docker-compose up -d
-    - rm -rf .git*
+#    - rm -rf .git*
