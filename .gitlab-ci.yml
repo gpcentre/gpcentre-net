@@ -17,9 +17,8 @@ build:
       - src
     expire_in: 1 hour
   tags:
-    - nginx
     - review-apps
-    - deploy
+    - shell
 
 review:
   stage: review
