@@ -2,12 +2,8 @@ version: '2'
 services:
   gpc:
     image: gpcentre/php71-fpm-nginx:latest
-    env_file: /etc/docker/envs/gpcentre-net.env
+    env_file: .env
     environment:
-      COMPOSE_PROJECT_NAME: gpcentre-net
-      DOMAIN: www.gpcentre.net
-      GIT_EMAIL: gp@gpcentre.net
-      VIRTUAL_HOST: localhost,*.gpcentre.net,138.68.11.157
       WEBROOT: /var/www/public
     external_links:
       - mariadb-node1:mariadb
