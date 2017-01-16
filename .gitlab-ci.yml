@@ -1,38 +1,79 @@
 image: alpine
 stages:
-#  - deploy-www
-  - deploy-container
+  - build
+  - review
+  - staging
+  - production
 
 variables:
-  DEPLOY_PATH: /var/docker/gpcentre-net
-  WWW_PATH: /var/www/gpcentre-net
+  APPS_DOMAIN: gpcentre.net
 
-#before_script:
-#  - echo "ENV=production" >> .env
-#  - echo "WWW_ROOT=/var/www/gpcentre-net" >> .env
-#  - echo "COMPOSE_PROJECT_NAME=gpcentre-net" >> .env
+build:
+  stage: build
+  script:
+    - echo Build my page
+  artifacts:
+    paths:
+      - src
+    expire_in: 1 hour
+  tags:
+    - review-apps
+    - shell
 
-#deploy:www:
-#  stage: deploy-www
-#  # variables:
-#  #   CI_DEBUG_TRACE: "true"
-#  tags:
-#    - shell
-#    - sfo2
-#  script:
-#    - rsync -av --delete src/ "$WWW_PATH"
+review:
+  stage: review
+  script:
+    - rm -f .env
+    - echo COMPOSE_PROJECT_NAME=$CI_BUILD_REF_SLUG >> .env
+    - echo VIRTUAL_HOST=$CI_BUILD_REF_SLUG.gpcentre.net >> .env
+    - docker-compose -p $CI_BUILD_REF_SLUG up -d
+  environment:
+    name: review/$CI_BUILD_REF_NAME
+    url: http://$CI_BUILD_REF_SLUG.$APPS_DOMAIN
+    on_stop: stop_review
+  only:
+    - branches
+  except:
+    - master
+  tags:
+    - review-apps
 
-deploy:container:
-  stage: deploy-container
+stop_review:
+  stage: review
+  script:
+    - rm -f .env
+    - echo COMPOSE_PROJECT_NAME=$CI_BUILD_REF_SLUG >> .env
+    - echo VIRTUAL_HOST=$CI_BUILD_REF_SLUG.gpcentre.net >> .env
+    - docker-compose -p $CI_BUILD_REF_SLUG down --force-orphans
+  variables:
+    GIT_STRATEGY: none
+  when: manual
+  environment:
+    name: review/$CI_BUILD_REF_NAME
+    action: stop
+  tags:
+    - review-apps
+    - shell
+
+
+production:
+  stage: production
   # variables:
   #   CI_DEBUG_TRACE: "true"
   tags:
     - shell
     - sfo2
+  when: manual
+  only:
+    - master
   script:
-    - docker-compose down --remove-orphans
+    - echo COMPOSE_PROJECT_NAME=gpcentre-net >> .env
+    - echo DOMAIN=www.gpcentre.net >> .env
+    - echo GIT_EMAIL=gp@gpcentre.net >> .env
+    - echo VIRTUAL_HOST=localhost,*.gpcentre.net,138.68.11.157 >> .env
+
 #    - rm -rf "$DEPLOY_PATH"
 #    - cp -R "$CI_PROJECT_DIR" "$DEPLOY_PATH"
 #    - cd "$DEPLOY_PATH"
-    - docker-compose up -d
+    - docker-compose up -d  --remove-orphans
 #    - rm -rf .git*
