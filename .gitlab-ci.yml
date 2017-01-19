@@ -27,6 +27,9 @@ review:
     - echo COMPOSE_PROJECT_NAME=$CI_BUILD_REF_SLUG >> .env
     - echo VIRTUAL_HOST=$CI_BUILD_REF_SLUG.gpcentre.net >> .env
     - docker-compose -p $CI_BUILD_REF_SLUG up -d
+    - cd src/
+    - composer self-update
+    - composer install
   environment:
     name: review/$CI_BUILD_REF_NAME
     url: http://$CI_BUILD_REF_SLUG.$APPS_DOMAIN
@@ -71,9 +74,7 @@ production:
     - echo DOMAIN=www.gpcentre.net >> .env
     - echo GIT_EMAIL=gp@gpcentre.net >> .env
     - echo VIRTUAL_HOST=localhost,*.gpcentre.net,138.68.11.157 >> .env
-
-#    - rm -rf "$DEPLOY_PATH"
-#    - cp -R "$CI_PROJECT_DIR" "$DEPLOY_PATH"
-#    - cd "$DEPLOY_PATH"
     - docker-compose up -d  --remove-orphans
-#    - rm -rf .git*
+    - cd src/
+    - composer self-update
+    - composer install

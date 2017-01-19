@@ -10,6 +10,7 @@ services:
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro 
       - ./src:/var/www
+    restart: always
 networks:
   default:
     external:
