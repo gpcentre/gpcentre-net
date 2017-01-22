@@ -28,8 +28,11 @@ review:
     - echo VIRTUAL_HOST=$CI_BUILD_REF_SLUG.gpcentre.net >> .env
     - docker-compose -p $CI_BUILD_REF_SLUG up -d
     - cd src/
+    - cp /etc/docker/.env.gpcentre-net .env
+    - php artisan key:generate
     - composer self-update
     - composer install
+    - php artisan config:cache 
   environment:
     name: review/$CI_BUILD_REF_NAME
     url: http://$CI_BUILD_REF_SLUG.$APPS_DOMAIN
@@ -40,13 +43,11 @@ review:
     - master
   tags:
     - review-apps
+    - shell
 
 stop_review:
   stage: review
   script:
-    - rm -f .env
-    - echo COMPOSE_PROJECT_NAME=$CI_BUILD_REF_SLUG >> .env
-    - echo VIRTUAL_HOST=$CI_BUILD_REF_SLUG.gpcentre.net >> .env
     - docker-compose -p $CI_BUILD_REF_SLUG down --remove-orphans
   variables:
     GIT_STRATEGY: none
@@ -76,5 +77,7 @@ production:
     - echo VIRTUAL_HOST=localhost,*.gpcentre.net,138.68.11.157 >> .env
     - docker-compose up -d  --remove-orphans
     - cd src/
+    - cp /etc/docker/.env.gpcentre-net .env
+    - php artisan key:generate
     - composer self-update
     - composer install
