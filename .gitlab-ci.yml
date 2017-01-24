@@ -15,8 +15,6 @@ build:
     - cp /etc/docker/.env.gpcentre-net .env
     - composer self-update
     - composer install
-    - php artisan key:generate
-    - php artisan config:cache 
   artifacts:
     paths:
       - src
@@ -79,4 +77,3 @@ production:
     - cp /etc/docker/.env.gpcentre-net .env
     - composer self-update
     - composer install
-    - php artisan key:generate
