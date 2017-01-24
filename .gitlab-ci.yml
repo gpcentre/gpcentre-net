@@ -11,7 +11,12 @@ variables:
 build:
   stage: build
   script:
-    - echo Build my page
+    - cd src/
+    - cp /etc/docker/.env.gpcentre-net .env
+    - composer self-update
+    - composer install
+    - php artisan key:generate
+    - php artisan config:cache 
   artifacts:
     paths:
       - src
@@ -27,12 +32,6 @@ review:
     - echo COMPOSE_PROJECT_NAME=$CI_BUILD_REF_SLUG >> .env
     - echo VIRTUAL_HOST=$CI_BUILD_REF_SLUG.gpcentre.net >> .env
     - docker-compose -p $CI_BUILD_REF_SLUG up -d
-    - cd src/
-    - cp /etc/docker/.env.gpcentre-net .env
-    - php artisan key:generate
-    - composer self-update
-    - composer install
-    - php artisan config:cache 
   environment:
     name: review/$CI_BUILD_REF_NAME
     url: http://$CI_BUILD_REF_SLUG.$APPS_DOMAIN
@@ -78,6 +77,6 @@ production:
     - docker-compose up -d  --remove-orphans
     - cd src/
     - cp /etc/docker/.env.gpcentre-net .env
-    - php artisan key:generate
     - composer self-update
     - composer install
+    - php artisan key:generate
