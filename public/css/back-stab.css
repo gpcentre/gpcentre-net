@@ -1,0 +1,87 @@
+
+body {
+	font-family: 'Helvetica Neue', Helvetica, sans-serif;
+	background: #ebeceb;
+}
+
+a {
+    color: black;
+    font-weight: bold;
+}
+
+h2 { margin: 0; }
+.clear { clear: both; }
+.sans-bot { display: none; }
+
+div#body {
+    left: 50%;
+    margin: -125px 0 0 -241px;
+    position: absolute;
+    top: 30%;
+    width: 481px;
+}
+
+div#bar {
+    box-shadow: 3px 3px 4px #ccc;
+    background: white;
+    color: black;
+    padding: 5px 20px;
+    margin: 10px 0;
+    border-radius: 10px;
+}
+
+div#bar h1 {
+    font-size: 1.75em;
+    display: inline-block;
+    margin-right: 18px;
+    vertical-align: middle;
+    font-family: 'Ubuntu', 'Helvetica Neue', Helvetica, sans-serif;
+}
+
+ul#online-portals {
+    height: 50px;
+    display: inline-block;
+}
+
+ul#online-portals li {
+    list-style: none;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+ul#online-portals li img {
+    margin: 5px;
+}
+
+div#extra {
+    clear: both;
+    display: none;
+
+    padding-top: 10px;
+    font-size: 0.75em;
+    text-align: left;
+}
+
+img#icon {
+    float: left;
+    height: 50px;
+    margin: 0 5px;
+}
+
+footer {
+    font-size: smaller;
+}
+
+footer span.email {
+    float: right;
+}
+
+footer span.validators {
+    font-size: xx-small;
+    color: #cbcccb;
+}
+
+footer span.validators a {
+    text-decoration: none;
+    color: #cbcccb;
+}

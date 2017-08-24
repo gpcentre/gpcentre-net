@@ -1,0 +1,20 @@
+{
+    "name": "gpcentre/gpcentre",
+    "description": "Personal site at gpcentre.net",
+    "authors": [
+        {
+            "name": "Philip G",
+            "email": "gp@gpcentre.net"
+        }
+    ],
+    "minimum-stability": "beta",
+    "require": {
+        "slim/slim": "^3.0",
+        "rubellum/slim-blade-view": "^0.1.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "GPCentre\\": ["gpcentre/src/"]
+        }
+    }
+}

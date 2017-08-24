@@ -1,15 +1,17 @@
-version: '2'
+version: '3'
 services:
   gpc:
-    image: gpcentre/php71-fpm-nginx:latest
+    image: richarvey/nginx-php-fpm:latest
     env_file: .env
     environment:
-      WEBROOT: /var/www/public
-    external_links:
-      - mariadb-node1:mariadb
+      - GIT_EMAIL=gp@gpcentre.net
+      - GIT_NAME="Philip G"
+      - GIT_USERNAME=guice
+      - GIT_REPO=gitlab.com/gpcentre/gpcentre-net.git
+      - WEBROOT=/var/www/html/public
     volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro 
-      - ./src:/var/www
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - .:/var/www/html
 networks:
   default:
     external:

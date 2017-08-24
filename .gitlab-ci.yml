@@ -1,31 +1,22 @@
 image: alpine
 stages:
-  - build
   - review
-  - staging
   - production
+
+variables:
+ CI_DEBUG_TRACE: "true"
 
 variables:
   APPS_DOMAIN: gpcentre.net
 
-build:
-  stage: build
-  script:
-    - echo Build my page
-  artifacts:
-    paths:
-      - src
-    expire_in: 1 hour
-  tags:
-    - review-apps
-    - shell
-
 review:
   stage: review
   script:
+    # Overloading default .env
     - rm -f .env
     - echo COMPOSE_PROJECT_NAME=$CI_BUILD_REF_SLUG >> .env
     - echo VIRTUAL_HOST=$CI_BUILD_REF_SLUG.gpcentre.net >> .env
+    - echo GIT_BRANCH="$CI_BUILD_NAME" >> .env
     - docker-compose -p $CI_BUILD_REF_SLUG up -d
   environment:
     name: review/$CI_BUILD_REF_NAME
@@ -41,6 +32,7 @@ review:
 stop_review:
   stage: review
   script:
+    # Overloading default .env
     - rm -f .env
     - echo COMPOSE_PROJECT_NAME=$CI_BUILD_REF_SLUG >> .env
     - echo VIRTUAL_HOST=$CI_BUILD_REF_SLUG.gpcentre.net >> .env
@@ -55,11 +47,8 @@ stop_review:
     - review-apps
     - shell
 
-
 production:
   stage: production
-  # variables:
-  #   CI_DEBUG_TRACE: "true"
   tags:
     - shell
     - sfo2
@@ -67,13 +56,4 @@ production:
   only:
     - master
   script:
-    - echo COMPOSE_PROJECT_NAME=gpcentre-net >> .env
-    - echo DOMAIN=www.gpcentre.net >> .env
-    - echo GIT_EMAIL=gp@gpcentre.net >> .env
-    - echo VIRTUAL_HOST=localhost,*.gpcentre.net,138.68.11.157 >> .env
-
-#    - rm -rf "$DEPLOY_PATH"
-#    - cp -R "$CI_PROJECT_DIR" "$DEPLOY_PATH"
-#    - cd "$DEPLOY_PATH"
     - docker-compose up -d  --remove-orphans
-#    - rm -rf .git*
