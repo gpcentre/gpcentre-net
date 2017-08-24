@@ -1,15 +1,19 @@
-version: '2'
+version: '3'
 services:
-  gpc:
-    image: gpcentre/php71-fpm-nginx:latest
+  www:
+    image: richarvey/nginx-php-fpm:latest
     env_file: .env
     environment:
-      WEBROOT: /var/www/public
+      - VIRTUAL_HOST=*.gpcentre.net,138.68.11.157
+      - COMPOSE_PROJECT_NAME=gpcentre-net
+      - DOMAIN=www.gpcentre.net
+      - WEBROOT=/var/www/html/public
+      - GIT_EMAIL=gp@gpcentre.net
+      - GIT_NAME="Philip G"
     external_links:
-      - mariadb-node1:mariadb
+      - proxy
     volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro 
-      - ./src:/var/www
+      - /var/run/docker.sock:/tmp/docker.sock:ro
 networks:
   default:
     external:
