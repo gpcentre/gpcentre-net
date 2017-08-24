@@ -23,6 +23,7 @@ review:
     VIRTUAL_HOST: $CI_BUILD_REF_SLUG.gpcentre.net
   script:
     - echo "Deploying Review App to http://$CI_BUILD_REF_SLUG.$APPS_DOMAIN"
+    - docker-compose up -d --remove-orphans
   environment:
     name: review/$CI_BUILD_REF_NAME
     url: http://$CI_BUILD_REF_SLUG.$APPS_DOMAIN
@@ -45,8 +46,7 @@ stop_review:
     name: review/$CI_BUILD_REF_NAME
     action: stop
   tags:
-    - review-apps
-    - shell
+    - docker
 
 production:
   stage: production
@@ -62,4 +62,4 @@ production:
     - sfo2
   when: manual
   only:
-    - master
+    - docker
