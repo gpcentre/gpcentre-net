@@ -60,7 +60,6 @@ production:
     GIT_USERNAME: $CI_REGISTRY_USER
     GIT_PERSONAL_TOKEN: $CI_REGISTRY_PASSWORD
     GIT_BRANCH: $CI_BUILD_REF_NAME
-    VIRTUAL_HOST: *.gpcentre.net
     DEPLOY_ROOT: /var/www/containers/gpcentre-net
   script:
     - docker-compose -p gpcentre.net up -d --remove-orphans

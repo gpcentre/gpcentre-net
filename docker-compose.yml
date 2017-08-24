@@ -2,17 +2,17 @@ version: '3'
 services:
   www:
     image: richarvey/nginx-php-fpm:latest
-    env_file: .env
+#    env_file: .env
     environment:
-      - COMPOSE_PROJECT_NAME=gpcentre-net
-      - DOMAIN=www.gpcentre.net
       - VIRTUAL_HOST=*.gpcentre.net,138.68.11.157
-      - GIT_REPO=gitlab.com/gpcentre/gpcentre-net.git
-      - GIT_EMAIL=gp@gpcentre.net
-      - GIT_NAME="Philip G"
-      - GIT_USERNAME=guice
-      - GIT_REPO=gitlab.com/gpcentre/gpcentre-net.git
-      - WEBROOT=/var/www/html/public
+#      - COMPOSE_PROJECT_NAME=gpcentre-net
+#      - DOMAIN=www.gpcentre.net
+#      - GIT_REPO=gitlab.com/gpcentre/gpcentre-net.git
+#      - GIT_EMAIL=gp@gpcentre.net
+#      - GIT_NAME="Philip G"
+#      - GIT_USERNAME=guice
+#      - GIT_REPO=gitlab.com/gpcentre/gpcentre-net.git
+#      - WEBROOT=/var/www/html/public
     external_links:
       - proxy
     volumes:
