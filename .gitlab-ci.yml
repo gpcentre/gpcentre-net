@@ -11,10 +11,12 @@ variables:
 
 review:
   stage: review
+  variables:
+    DEPLOY_ROOT: /var/www/containers/$CI_BUILD_REF_SLUG-gpcentre-net
   script:
-    # Overloading default .env
-    - rm -f .env
-    - echo COMPOSE_PROJECT_NAME=$CI_BUILD_REF_SLUG >> .env
+    - mkdir -p $DEPLOY_ROOT
+    - cd $DEPLOY_ROOT
+    - echo COMPOSE_PROJECT_NAME=$CI_BUILD_REF_SLUG > .env
     - echo VIRTUAL_HOST=$CI_BUILD_REF_SLUG.gpcentre.net >> .env
     - echo GIT_BRANCH="$CI_BUILD_NAME" >> .env
     - docker-compose -p $CI_BUILD_REF_SLUG up -d
@@ -31,14 +33,16 @@ review:
 
 stop_review:
   stage: review
-  script:
-    # Overloading default .env
-    - rm -f .env
-    - echo COMPOSE_PROJECT_NAME=$CI_BUILD_REF_SLUG >> .env
-    - echo VIRTUAL_HOST=$CI_BUILD_REF_SLUG.gpcentre.net >> .env
-    - docker-compose -p $CI_BUILD_REF_SLUG down --remove-orphans
   variables:
     GIT_STRATEGY: none
+    DEPLOY_ROOT: /var/www/containers/$CI_BUILD_REF_SLUG-gpcentre-net
+  script:
+    # Removing any existing.env
+    - cd $DEPLOY_ROOT
+    - echo COMPOSE_PROJECT_NAME=$CI_BUILD_REF_SLUG > .env
+    - echo VIRTUAL_HOST=$CI_BUILD_REF_SLUG.gpcentre.net >> .env
+    - docker-compose -p $CI_BUILD_REF_SLUG down --remove-orphans
+    - rm -rf $DEPLOY_ROOT
   when: manual
   environment:
     name: review/$CI_BUILD_REF_NAME
@@ -49,11 +53,16 @@ stop_review:
 
 production:
   stage: production
+  variables:
+    DEPLOY_ROOT: /var/www/containers/gpcentre-net
+  script:
+    - mkdir -p $DEPLOY_ROOT
+    - cd $DEPLOY_ROOT
+    - cp -p /etc/docker/envs/gpcentre-net .env
+    - docker-compose -p gpcentre.net up -d --remove-orphans
   tags:
     - shell
     - sfo2
   when: manual
   only:
     - master
-  script:
-    - docker-compose up -d  --remove-orphans
