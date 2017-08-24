@@ -17,8 +17,8 @@ review:
   variables:
     COMPOSE_PROJECT_NAME: $CI_BUILD_REF_SLUG
   script:
-    - echo "GIT_BRANCH=$CI_BUILD_REF_NAME > .env"
-    - echo "VIRTUAL_HOST=$CI_BUILD_REF_SLUG.gpcentre.net >> .env"
+    - echo "GIT_BRANCH=$CI_BUILD_REF_NAME" > .env"
+    - echo "VIRTUAL_HOST=$CI_BUILD_REF_SLUG.gpcentre.net" >> .env
     - echo "Deploying Review App to $CI_BUILD_REF_SLUG.gpcentre.net"
     - docker-compose -p $CI_BUILD_REF_SLUG up -d
   environment:
