@@ -11,9 +11,10 @@ review:
   stage: review
   image: richarvey/nginx-php-fpm:latest
   script:
-    - echo COMPOSE_PROJECT_NAME=$CI_BUILD_REF_SLUG > .env
-    - echo VIRTUAL_HOST=$CI_BUILD_REF_SLUG.gpcentre.net >> .env
+    - echo GIT_REPO=$GIT_REPO > .env
     - echo GIT_BRANCH="$CI_BUILD_REF_NAME" >> .env
+    - echo COMPOSE_PROJECT_NAME=$CI_BUILD_REF_SLUG >> .env
+    - echo VIRTUAL_HOST=$CI_BUILD_REF_SLUG.gpcentre.net >> .env
     - docker-compose up -d --remove-orphans
   environment:
     name: review/$CI_BUILD_REF_NAME
