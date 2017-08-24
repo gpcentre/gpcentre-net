@@ -16,7 +16,6 @@ review:
     - echo COMPOSE_PROJECT_NAME=$CI_BUILD_REF_SLUG >> .env
     - echo VIRTUAL_HOST=$CI_BUILD_REF_SLUG.gpcentre.net >> .env
     - docker-compose up -d --remove-orphans
-    - docker-compose logs
   environment:
     name: review/$CI_BUILD_REF_NAME
     url: http://$CI_BUILD_REF_SLUG.$APPS_DOMAIN
@@ -50,11 +49,9 @@ production:
   script:
     - echo GIT_REPO=$CI_REPOSITORY_URL > .env
     - docker-compose up -d --remove-orphans
-    - docker-compose logs
   tags:
     - shell
     - sfo2
-  when: manual
   only:
     - master
 
