@@ -4,6 +4,10 @@ stages:
   - production
 
 variables:
+  GIT_EMAIL: gp@gpcentre.net
+  GIT_NAME: "Philip G"
+  DOMAIN: www.gpcentre.net
+  WEBROOT: /var/www/html/public
   APPS_DOMAIN: gpcentre.net
 #  CI_DEBUG_TRACE: "true"
 
@@ -11,19 +15,15 @@ review:
   stage: review
   image: richarvey/nginx-php-fpm:latest
   variables:
-    GIT_EMAIL: gp@gpcentre.net
-    GIT_NAME: "Philip G"
-    COMPOSE_PROJECT_NAME: gpcentre-net
-    DOMAIN: www.gpcentre.net
-    WEBROOT: /var/www/html/public
     GIT_REPO: $CI_REPOSITORY_URL
     GIT_USERNAME: $CI_REGISTRY_USER
     GIT_PERSONAL_TOKEN: $CI_REGISTRY_PASSWORD
     GIT_BRANCH: $CI_BUILD_REF_NAME
     VIRTUAL_HOST: $CI_BUILD_REF_SLUG.gpcentre.net
+    COMPOSE_PROJECT_NAME: $CI_BUILD_REF_SLUG
   script:
-    - echo "Deploying Review App to http://$CI_BUILD_REF_SLUG.$APPS_DOMAIN"
-    - docker-compose up -d --remove-orphans
+    - echo "Deploying Review App to $CI_BUILD_REF_SLUG.gpcentre.net"
+    - docker-compose -p $CI_BUILD_REF_SLUG up -d
   environment:
     name: review/$CI_BUILD_REF_NAME
     url: http://$CI_BUILD_REF_SLUG.$APPS_DOMAIN
@@ -33,33 +33,40 @@ review:
   except:
     - master
   tags:
-    - docker
+    - shell
+    - sfo2
 
 stop_review:
   stage: review
   variables:
+    COMPOSE_PROJECT_NAME: $CI_BUILD_REF_SLUG
     GIT_STRATEGY: none
   script:
-    - echo "Removing review/$CI_BUILD_REF_NAME Environment"
+    - docker-compose -p $CI_BUILD_REF_SLUG down --remove-orphans
   when: manual
   environment:
     name: review/$CI_BUILD_REF_NAME
     action: stop
   tags:
-    - docker
+    - shell
+    - sfo2
+  except:
+    - master
 
 production:
   stage: production
   variables:
+    GIT_REPO: $CI_REPOSITORY_URL
+    GIT_USERNAME: $CI_REGISTRY_USER
+    GIT_PERSONAL_TOKEN: $CI_REGISTRY_PASSWORD
+    GIT_BRANCH: $CI_BUILD_REF_NAME
+    VIRTUAL_HOST: *.gpcentre.net
     DEPLOY_ROOT: /var/www/containers/gpcentre-net
   script:
-    - mkdir -p $DEPLOY_ROOT
-    - cd $DEPLOY_ROOT
-    - cp -p /etc/docker/envs/gpcentre-net .env
     - docker-compose -p gpcentre.net up -d --remove-orphans
   tags:
     - shell
     - sfo2
   when: manual
   only:
-    - docker
+    - master
