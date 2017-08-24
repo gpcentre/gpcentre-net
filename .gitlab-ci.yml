@@ -5,7 +5,7 @@ stages:
 
 variables:
   APPS_DOMAIN: gpcentre.net
-  CI_DEBUG_TRACE: "true"
+#  CI_DEBUG_TRACE: "true"
 
 review:
   stage: review
@@ -22,7 +22,7 @@ review:
     GIT_BRANCH: $CI_BUILD_REF_NAME
     VIRTUAL_HOST: $CI_BUILD_REF_SLUG.gpcentre.net
   script:
-    - echo "Deploying Review App"
+    - echo "Deploying Review App to http://$CI_BUILD_REF_SLUG.$APPS_DOMAIN"
   environment:
     name: review/$CI_BUILD_REF_NAME
     url: http://$CI_BUILD_REF_SLUG.$APPS_DOMAIN
@@ -38,14 +38,8 @@ stop_review:
   stage: review
   variables:
     GIT_STRATEGY: none
-    DEPLOY_ROOT: /var/www/containers/$CI_BUILD_REF_SLUG-gpcentre-net
   script:
-    # Removing any existing.env
-    - cd $DEPLOY_ROOT
-    - echo COMPOSE_PROJECT_NAME=$CI_BUILD_REF_SLUG > .env
-    - echo VIRTUAL_HOST=$CI_BUILD_REF_SLUG.gpcentre.net >> .env
-    - docker-compose -p $CI_BUILD_REF_SLUG down --remove-orphans
-    - rm -rf $DEPLOY_ROOT
+    - echo "Removing review/$CI_BUILD_REF_NAME Environment"
   when: manual
   environment:
     name: review/$CI_BUILD_REF_NAME
