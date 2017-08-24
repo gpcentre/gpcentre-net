@@ -11,20 +11,18 @@ review:
   stage: review
   image: richarvey/nginx-php-fpm:latest
   variables:
-    DEPLOY_ROOT: /var/www/containers/$CI_BUILD_REF_SLUG-gpcentre-net
     GIT_EMAIL: gp@gpcentre.net
     GIT_NAME: "Philip G"
-    GIT_USERNAME: guice
-    GIT_REPO: gitlab.com/gpcentre/gpcentre-net.git
-    GIT_PERSONAL_TOKEN: yog3w9qyrtMw5688t8Ps
     COMPOSE_PROJECT_NAME: gpcentre-net
     DOMAIN: www.gpcentre.net
     WEBROOT: /var/www/html/public
+    GIT_REPO: $CI_REPOSITORY_URL
+    GIT_USERNAME: $CI_REGISTRY_USER
+    GIT_PERSONAL_TOKEN: $CI_REGISTRY_PASSWORD
+    GIT_BRANCH: $CI_BUILD_REF_NAME
+    VIRTUAL_HOST: $CI_BUILD_REF_SLUG.gpcentre.net
   script:
-    - cp -p /etc/docker/envs/gpcentre-net .env
-    - echo COMPOSE_PROJECT_NAME=$CI_BUILD_REF_SLUG > .env
-    - echo VIRTUAL_HOST=$CI_BUILD_REF_SLUG.gpcentre.net >> .env
-    - echo GIT_BRANCH="$CI_BUILD_NAME" >> .env
+    - echo "Deploying Review App"
   environment:
     name: review/$CI_BUILD_REF_NAME
     url: http://$CI_BUILD_REF_SLUG.$APPS_DOMAIN
