@@ -4,22 +4,23 @@ stages:
   - production
 
 variables:
- CI_DEBUG_TRACE: "true"
-
-variables:
   APPS_DOMAIN: gpcentre.net
+  CI_DEBUG_TRACE: "true"
 
 review:
   stage: review
+  image: richarvey/nginx-php-fpm:latest
   variables:
     DEPLOY_ROOT: /var/www/containers/$CI_BUILD_REF_SLUG-gpcentre-net
-  script:
-    - mkdir -p $DEPLOY_ROOT
-    - cd $DEPLOY_ROOT
-    - echo COMPOSE_PROJECT_NAME=$CI_BUILD_REF_SLUG > .env
-    - echo VIRTUAL_HOST=$CI_BUILD_REF_SLUG.gpcentre.net >> .env
-    - echo GIT_BRANCH="$CI_BUILD_NAME" >> .env
-    - docker-compose -p $CI_BUILD_REF_SLUG up -d
+    GIT_EMAIL: gp@gpcentre.net
+    GIT_NAME: "Philip G"
+    GIT_USERNAME: guice
+    GIT_REPO: gitlab.com/gpcentre/gpcentre-net.git
+    GIT_PERSONAL_TOKEN: yog3w9qyrtMw5688t8Ps
+    VIRTUAL_HOST: $CI_BUILD_REF_SLUG.gpcentre.net
+    COMPOSE_PROJECT_NAME: gpcentre-net
+    DOMAIN: www.gpcentre.net
+    WEBROOT: /var/www/html/public
   environment:
     name: review/$CI_BUILD_REF_NAME
     url: http://$CI_BUILD_REF_SLUG.$APPS_DOMAIN
@@ -29,7 +30,7 @@ review:
   except:
     - master
   tags:
-    - review-apps
+    - docker
 
 stop_review:
   stage: review
