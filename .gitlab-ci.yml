@@ -4,23 +4,16 @@ stages:
   - production
 
 variables:
-  GIT_EMAIL: gp@gpcentre.net
-  GIT_NAME: "Philip G"
-  DOMAIN: www.gpcentre.net
-  WEBROOT: /var/www/html/public
   APPS_DOMAIN: gpcentre.net
 #  CI_DEBUG_TRACE: "true"
 
 review:
   stage: review
   image: richarvey/nginx-php-fpm:latest
-  variables:
-    COMPOSE_PROJECT_NAME: $CI_BUILD_REF_SLUG
   script:
     - echo COMPOSE_PROJECT_NAME=$CI_BUILD_REF_SLUG > .env
     - echo VIRTUAL_HOST=$CI_BUILD_REF_SLUG.gpcentre.net >> .env
     - echo GIT_BRANCH="$CI_BUILD_REF_NAME" > .env
-    - echo "Deploying Review App to $CI_BUILD_REF_SLUG.gpcentre.net"
     - docker-compose up -d --remove-orphans
   environment:
     name: review/$CI_BUILD_REF_NAME
@@ -37,7 +30,6 @@ review:
 stop_review:
   stage: review
   variables:
-    COMPOSE_PROJECT_NAME: $CI_BUILD_REF_SLUG
     GIT_STRATEGY: none
   script:
     - docker-compose -p $CI_BUILD_REF_SLUG down --remove-orphans
@@ -53,14 +45,8 @@ stop_review:
 
 production:
   stage: production
-  variables:
-    GIT_REPO: $CI_REPOSITORY_URL
-    GIT_USERNAME: $CI_REGISTRY_USER
-    GIT_PERSONAL_TOKEN: $CI_REGISTRY_PASSWORD
-    GIT_BRANCH: $CI_BUILD_REF_NAME
-    DEPLOY_ROOT: /var/www/containers/gpcentre-net
   script:
-    - docker-compose -p gpcentre.net up -d --remove-orphans
+    - docker-compose up -d --remove-orphans
   tags:
     - shell
     - sfo2
