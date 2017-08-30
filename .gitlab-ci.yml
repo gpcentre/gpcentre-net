@@ -38,7 +38,7 @@ review:
     - docker stop review-$CI_COMMIT_REF_SLUG || true
     - docker rm review-$CI_COMMIT_REF_SLUG || true
     - docker run -d --env-file .env
-        -v /var/run/docker.sock:/var/run/docker.sock
+        --network gpcentre_default
         --name review-$CI_COMMIT_REF_SLUG
         registry.gitlab.com/gpcentre/gpcentre-net:$CI_COMMIT_REF_SLUG
   environment:
@@ -79,7 +79,7 @@ production:
     - docker stop gpcentre.net || true
     - docker rm gpcentre.net || true
     - docker run -d --env-file .env
-        -v /var/run/docker.sock:/var/run/docker.sock
+        --network gpcentre_default
         --name gpcentre.net
         registry.gitlab.com/gpcentre/gpcentre-net:latest
   tags:
