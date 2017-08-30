@@ -22,8 +22,8 @@ build:
     - echo "Building the app"
     - docker build -t myproject/myapp .
     - docker tag gpcentre/gpcentre-net:latest \
-      registry.gitlab.com/gpcentre/gpcentre-net:$CI_COMMIT_REF_NAME
-    - docker push registry.gitlab.com/gpcentre/gpcentre-net:$CI_COMMIT_REF_NAME
+      registry.gitlab.com/gpcentre/gpcentre-net:$CI_COMMIT_REF_SLUG
+    - docker push registry.gitlab.com/gpcentre/gpcentre-net:$CI_COMMIT_REF_SLUG
 
 review:
   stage: review
@@ -34,13 +34,13 @@ review:
     - echo DOMAIN=$CI_BUILD_REF_SLUG.gpcentre.net >> .env
     - echo VIRTUAL_HOST=$CI_BUILD_REF_SLUG.gpcentre.net >> .env
     - echo LETSENCRYPT_HOST=$CI_BUILD_REF_SLUG.gpcentre.net >> .env
-    - docker pull registry.gitlab.com/gpcentre/gpcentre-net:$CI_COMMIT_REF_NAME
-    - docker stop review-$CI_COMMIT_REF_NAME || true
-    - docker rm review-$CI_COMMIT_REF_NAME || true
+    - docker pull registry.gitlab.com/gpcentre/gpcentre-net:$CI_COMMIT_REF_SLUG
+    - docker stop review-$CI_COMMIT_REF_SLUG || true
+    - docker rm review-$CI_COMMIT_REF_SLUG || true
     - docker run -d \
         -v /var/run/docker.sock:/var/run/docker.sock \
         --name review-$CI_COMMIT_REF_NAME \
-        registry.gitlab.com/gpcentre/gpcentre-net:$CI_COMMIT_REF_NAME
+        registry.gitlab.com/gpcentre/gpcentre-net:$CI_COMMIT_REF_SLUG
   environment:
     name: review/$CI_BUILD_REF_NAME
     url: http://$CI_BUILD_REF_SLUG.$APPS_DOMAIN
@@ -81,7 +81,7 @@ production:
     - docker run -d \
         -v /var/run/docker.sock:/var/run/docker.sock \
         --name gpcentre.net \
-        registry.gitlab.com/gpcentre/gpcentre-net:$CI_COMMIT_REF_NAME
+        registry.gitlab.com/gpcentre/gpcentre-net:$CI_COMMIT_REF_SLUG
   tags:
     - shell
     - sfo2
