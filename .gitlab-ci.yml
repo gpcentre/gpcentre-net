@@ -7,7 +7,7 @@ stages:
 variables:
   DEPLOY_PATH: /var/docker/gpcentre.net
   APPS_DOMAIN: gpcentre.net
-  CONTAINER_TEST_IMAGE: registry.gitlab.com/gpcentre/gpcentre-net:$CI_COMMIT_REF_NAME
+  CONTAINER_TEST_IMAGE: registry.gitlab.com/gpcentre/gpcentre-net:$CI_COMMIT_REF_SLUG
   CONTAINER_RELEASE_IMAGE: registry.gitlab.com/gpcentre/gpcentre-net:latest
   CONTAINER_REVIEW_NAME: review-$CI_COMMIT_REF_SLUG
   CONTAINER_RELEASE_NAME: gpcentre.net
