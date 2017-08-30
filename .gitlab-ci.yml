@@ -36,7 +36,7 @@ review:
     - docker pull registry.gitlab.com/gpcentre/gpcentre-net:$CI_COMMIT_REF_SLUG
     - docker stop review-$CI_COMMIT_REF_SLUG || true
     - docker rm review-$CI_COMMIT_REF_SLUG || true
-    - docker run -d --env_file .env
+    - docker run -d --env-file .env
         -v /var/run/docker.sock:/var/run/docker.sock
         --name review-$CI_COMMIT_REF_SLUG
         registry.gitlab.com/gpcentre/gpcentre-net:$CI_COMMIT_REF_SLUG
@@ -77,7 +77,7 @@ production:
     - echo LETSENCRYPT_HOST=docker.gpcentre.net >> .env
     - docker stop gpcentre.net || true
     - docker rm gpcentre.net || true
-    - docker run -d
+    - docker run -d --env-file .env
         -v /var/run/docker.sock:/var/run/docker.sock
         --name gpcentre.net
         registry.gitlab.com/gpcentre/gpcentre-net:latest
