@@ -33,7 +33,6 @@ review:
     - echo DOMAIN=$CI_BUILD_REF_SLUG.gpcentre.net >> .env
     - echo VIRTUAL_HOST=$CI_BUILD_REF_SLUG.gpcentre.net >> .env
     - echo LETSENCRYPT_HOST=$CI_BUILD_REF_SLUG.gpcentre.net >> .env
-    - echo LETSENCRYPT_TEST=true >> .env
     - docker pull registry.gitlab.com/gpcentre/gpcentre-net:$CI_COMMIT_REF_SLUG
     - docker stop review-$CI_COMMIT_REF_SLUG || true
     - docker rm review-$CI_COMMIT_REF_SLUG || true
