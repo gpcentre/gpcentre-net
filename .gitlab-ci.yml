@@ -9,6 +9,7 @@ variables:
 #  CI_DEBUG_TRACE: "true"
 
 before_script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
     - echo COMPOSE_PROJECT_NAME=$CI_BUILD_REF_SLUG > .env
     - echo LETSENCRYPT_EMAIL=gp@gpcentre.net >> .env
     - echo WEBROOT=/var/www/html/public >> .env
