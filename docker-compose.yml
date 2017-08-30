@@ -1,17 +1,10 @@
 version: '3'
 services:
   www:
-    image: richarvey/nginx-php-fpm:latest
+    build: .
     env_file: .env
-    environment:
-      - VIRTUAL_HOST=*.gpcentre.net,138.68.11.157
-      - COMPOSE_PROJECT_NAME=gpcentre-net
-      - DOMAIN=www.gpcentre.net
-      - WEBROOT=/var/www/html/public
-      - GIT_EMAIL=gp@gpcentre.net
-      - GIT_NAME="Philip G"
     external_links:
-      - proxy
+      - nginx
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
 networks:
