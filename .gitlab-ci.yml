@@ -10,9 +10,7 @@ variables:
 
 before_script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
-    - echo COMPOSE_PROJECT_NAME=$CI_BUILD_REF_SLUG > .env
-    - echo LETSENCRYPT_EMAIL=gp@gpcentre.net >> .env
-    - echo WEBROOT=/var/www/html/public >> .env
+    - rm -f .env
 
 build:
   tags:
@@ -38,7 +36,7 @@ review:
     - docker pull registry.gitlab.com/gpcentre/gpcentre-net:$CI_COMMIT_REF_SLUG
     - docker stop review-$CI_COMMIT_REF_SLUG || true
     - docker rm review-$CI_COMMIT_REF_SLUG || true
-    - docker run -d
+    - docker run -d --env_file .env
         -v /var/run/docker.sock:/var/run/docker.sock
         --name review-$CI_COMMIT_REF_SLUG
         registry.gitlab.com/gpcentre/gpcentre-net:$CI_COMMIT_REF_SLUG
@@ -82,7 +80,7 @@ production:
     - docker run -d
         -v /var/run/docker.sock:/var/run/docker.sock
         --name gpcentre.net
-        registry.gitlab.com/gpcentre/gpcentre-net:$CI_COMMIT_REF_SLUG
+        registry.gitlab.com/gpcentre/gpcentre-net:latest
   tags:
     - shell
     - sfo2
