@@ -1,11 +1,16 @@
 stages:
   - build
   - review
-  - production
+  - tag
+  - deploy
 
 variables:
   DEPLOY_PATH: /var/docker/gpcentre.net
   APPS_DOMAIN: gpcentre.net
+  CONTAINER_TEST_IMAGE: registry.gitlab.com/gpcentre/gpcentre-net:$CI_COMMIT_REF_SLUG
+  CONTAINER_RELEASE_IMAGE: registry.gitlab.com/gpcentre/gpcentre-net:latest
+  CONTAINER_REVIEW_NAME: review-$CI_COMMIT_REF_SLUG
+  CONTAINER_RELEASE_NAME: gpcentre.net
 #  CI_DEBUG_TRACE: "true"
 
 before_script:
@@ -19,10 +24,8 @@ build:
   stage: build
   script:
     - echo "Building the app"
-    - docker build -t gpcentre/gpcentre-net .
-    - docker tag gpcentre/gpcentre-net:latest
-        registry.gitlab.com/gpcentre/gpcentre-net:$CI_COMMIT_REF_SLUG
-    - docker push registry.gitlab.com/gpcentre/gpcentre-net:$CI_COMMIT_REF_SLUG
+    - docker build -t $CONTAINER_TEST_IMAGE .
+    - docker push $CONTAINER_TEST_IMAGE
 
 review:
   stage: review
@@ -33,15 +36,13 @@ review:
     - echo DOMAIN=$CI_BUILD_REF_SLUG.gpcentre.net >> .env
     - echo VIRTUAL_HOST=$CI_BUILD_REF_SLUG.gpcentre.net >> .env
     - echo LETSENCRYPT_HOST=$CI_BUILD_REF_SLUG.gpcentre.net >> .env
-    - docker pull registry.gitlab.com/gpcentre/gpcentre-net:$CI_COMMIT_REF_SLUG
-    - docker stop review-$CI_COMMIT_REF_SLUG || true
-    - docker rm review-$CI_COMMIT_REF_SLUG || true
-    - docker run -d --env-file .env
-        --network gpcentre_default
-        --name review-$CI_COMMIT_REF_SLUG
-        registry.gitlab.com/gpcentre/gpcentre-net:$CI_COMMIT_REF_SLUG
+    - docker pull $CONTAINER_TEST_IMAGE
+    - docker stop $CONTAINER_REVIEW_NAME || true
+    - docker rm $CONTAINER_REVIEW_NAME || true
+    - docker run -d --env-file .env --network gpcentre_default --name $CONTAINER_REVIEW_NAME
+        $CONTAINER_TEST_IMAGE
   environment:
-    name: review/$CI_BUILD_REF_NAME
+    name: review/$CI_BUILD_REF_SLUG
     url: http://$CI_BUILD_REF_SLUG.$APPS_DOMAIN
     on_stop: stop_review
   only:
@@ -57,11 +58,11 @@ stop_review:
   variables:
     GIT_STRATEGY: none
   script:
-    - docker stop review-$CI_COMMIT_REF_NAME || true
-    - docker rm review-$CI_COMMIT_REF_NAME || true
+    - docker stop $CONTAINER_REVIEW_NAME || true
+    - docker rm $CONTAINER_REVIEW_NAME || true
   when: manual
   environment:
-    name: review/$CI_BUILD_REF_NAME
+    name: review/$CI_BUILD_REF_SLUG
     action: stop
   tags:
     - shell
@@ -69,18 +70,28 @@ stop_review:
   except:
     - master
 
-production:
-  stage: production
+tag:
+  stage: tag
+  script:
+    - docker pull $CONTAINER_TEST_IMAGE
+    - docker tag $CONTAINER_TEST_IMAGE $CONTAINER_RELEASE_IMAGE
+    - docker push $CONTAINER_RELEASE_IMAGE
+  tags:
+    - shell
+    - sfo2
+  only:
+    - master
+
+deploy:
+  stage: deploy
   script:
     - echo DOMAIN=docker.gpcentre.net >> .env
     - echo VIRTUAL_HOST=docker.gpcentre.net >> .env
     - echo LETSENCRYPT_HOST=docker.gpcentre.net >> .env
     - docker stop gpcentre.net || true
     - docker rm gpcentre.net || true
-    - docker run -d --env-file .env
-        --network gpcentre_default
-        --name gpcentre.net
-        registry.gitlab.com/gpcentre/gpcentre-net:latest
+    - docker run -d --env-file .env --network gpcentre_default --name $CONTAINER_RELEASE_NAME
+        $CONTAINER_RELEASE_IMAGE
   tags:
     - shell
     - sfo2
