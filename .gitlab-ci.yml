@@ -15,7 +15,8 @@ before_script:
 
 build:
   tags:
-    - php7
+    - shell
+    - sfo2
   stage: build
   script:
     - echo "Building the app"
