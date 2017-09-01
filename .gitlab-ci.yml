@@ -33,7 +33,6 @@ review:
     GIT_STRATEGY: none
   script:
     - echo "Deploying Review env"
-    - echo DOMAIN=$CI_BUILD_REF_SLUG.gpcentre.net >> .env
     - echo VIRTUAL_HOST=$CI_BUILD_REF_SLUG.gpcentre.net >> .env
     - echo LETSENCRYPT_HOST=$CI_BUILD_REF_SLUG.gpcentre.net >> .env
     - docker pull $CONTAINER_TEST_IMAGE
@@ -85,9 +84,8 @@ tag:
 deploy:
   stage: deploy
   script:
-    - echo DOMAIN=docker.gpcentre.net >> .env
-    - echo VIRTUAL_HOST=docker.gpcentre.net >> .env
-    - echo LETSENCRYPT_HOST=docker.gpcentre.net >> .env
+    - echo VIRTUAL_HOST=gpcentre.net,www.gpcentre.net,docker.gpcentre.net >> .env
+    - echo LETSENCRYPT_HOST=gpcentre.net,www.gpcentre.net,docker.gpcentre.net >> .env
     - docker stop gpcentre.net || true
     - docker rm gpcentre.net || true
     - docker run -d --env-file .env --network gpcentre_default --name $CONTAINER_RELEASE_NAME
