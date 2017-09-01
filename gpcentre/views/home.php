@@ -13,7 +13,7 @@
 <body>
 
 <div id="body">
-    <span id="availability" style="float: right; display: block;"><img src="/images/greendot3.png" width="20px" title="I'm on the market, open to new Sr. level PHP opportunities."/></span>
+    <!-- span id="availability" style="float: right; display: block;"><img src="/images/greendot3.png" width="20px" title="I'm on the market, open to new Sr. level PHP opportunities."/></span -->
     <header>A simple guy in <strong>Silicon Valley</strong> with a "thing" for <strong>PHP</strong>.</header>
     <div id="bar">
         <h1><a href="" id="link">Philip Gabbert Jr.</a></h1>
