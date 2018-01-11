@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>GPCentre.net :: Philip Gabbert Jr.</title>
+    <title>GPCentre.net :: Philip Zozobrado</title>
     <link href='//fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
     <link href="/css/reset.css" rel="stylesheet" type="text/css" />
     <link href="/css/back-stab.css" rel="stylesheet" type="text/css" />
@@ -13,10 +13,10 @@
 <body>
 
 <div id="body">
-    <span id="availability" style="float: right; display: block;"><img src="/images/greendot3.png" width="20px" title="I'm on the market, open to new Sr. level PHP opportunities."/></span>
+<!--    <span id="availability" style="float: right; display: block;"><img src="/images/greendot3.png" width="20px" title="I'm on the market, open to new Sr. level PHP opportunities."/></span>-->
     <header>A simple guy in <strong>Silicon Valley</strong> with a "thing" for <strong>PHP</strong>.</header>
     <div id="bar">
-        <h1><a href="" id="link">Philip Gabbert Jr.</a></h1>
+        <h1><a href="" id="link">Philip Zozobrado</a></h1>
         <ul id="online-portals">
             <li><a href="https://plus.google.com/105981717032173537224/" title="Google+"><img src="/images/google-plus.png" alt="Google+" /></a></li>
             <li><a href="http://www.facebook.com/guice" title="For my Friends and Family"><img src="/images/facebook.png" alt="Facebook" /></a></li>
