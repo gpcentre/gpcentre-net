@@ -3,11 +3,12 @@
     "description": "Personal site at gpcentre.net",
     "authors": [
         {
-            "name": "Philip G",
+            "name": "Philip Z",
             "email": "gp@gpcentre.net"
         }
     ],
     "minimum-stability": "beta",
+    "prefer-stable": true,
     "require": {
         "slim/slim": "^3.0",
         "rubellum/slim-blade-view": "^0.1.1"
