@@ -84,7 +84,7 @@ tag:
 deploy:
   stage: deploy
   script:
-    - echo VIRTUAL_HOST=gpcentre.net,www.gpcentre.net,docker.gpcentre.net >> .env
+    - echo VIRTUAL_HOST=gpcentre.net,www.gpcentre.net,docker.gpcentre.net,sfo2.gpcentre.net >> .env
     - echo LETSENCRYPT_HOST=gpcentre.net,www.gpcentre.net,docker.gpcentre.net >> .env
     - docker stop gpcentre.net || true
     - docker rm gpcentre.net || true
