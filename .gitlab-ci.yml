@@ -88,7 +88,7 @@ deploy:
     - echo LETSENCRYPT_HOST=gpcentre.net,www.gpcentre.net,docker.gpcentre.net >> .env
     - docker stop gpcentre.net || true
     - docker rm gpcentre.net || true
-    - docker run -d --env-file .env -p80:80 --network gpc_web --name $CONTAINER_RELEASE_NAME --restart always
+    - docker run -d --env-file .env -p80:80 --name $CONTAINER_RELEASE_NAME --restart always
         $CONTAINER_RELEASE_IMAGE
   tags:
     - shell
